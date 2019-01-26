@@ -34,3 +34,15 @@ print(list(first_list))
 # Дан произвольный список из целых чисел.
 # Получите НОВЫЙ список из элементов исходного, выполнив следующие условия:
 # если элемент кратен двум, то разделить его на 4, если не кратен, то умножить на два.
+
+print('-' * 5, 'Решение третьй задачи', '-' * 5)
+
+random_list = [1, 3, 4, 6, 78, 56, 34, 12, 89, 23, 46]
+index_list = 0
+for number in random_list:
+    if number % 2 == 1:
+        random_list[index_list] = number * 2
+    else:
+        random_list[index_list] = number / 4
+    index_list += 1
+print('{}'.format(random_list))
