@@ -54,4 +54,10 @@ print(str(list_random))
 # например, lst = [1, 2, 4, 5, 6, 2, 5, 2], нужно получить lst2 = [1, 2, 4, 5, 6]
 # б) элементы исходного списка, которые не имеют повторений:
 # например, lst = [1 , 2, 4, 5, 6, 2, 5, 2], нужно получить lst2 = [1, 4, 6]
+print('-' * 5, 'Решение четвертой задачи', '-' * 5)
 
+array = [1, 8, 3, 5, 10, 13, 10, 8, 34, 3]
+array_copies = set(array)
+array_without_copies = set(array) ^ array_copies
+print('а) ' + str(list(array_copies)))
+print('б) ' + str(list(array_without_copies)))  # ???
