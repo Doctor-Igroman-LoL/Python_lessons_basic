@@ -61,30 +61,124 @@ import random
 
 class Card:
 
-    def __init__(self, name):
-        self.name = name
-        self.matrix = []
-        #print('rotate_matrix = ', list(map(list, zip(self.matrix))))
+    def __init__(self):
+        self.matrix = [[], [], []]
+        self.buffer = 0
 
     def creation(self):
-        for _ in range(3):
-            self.matrix.append(self.string_generation())
+        self.number_random = random.sample(range(1, 91), 15)
+        self.number_random.sort()
+        for i, line in enumerate(self.number_random):
+            if i in range(0, 5):
+                self.matrix[0].append(line)
+            elif i in range(5, 10):
+                self.matrix[1].append(line)
+            elif i in range(10, 15):
+                self.matrix[2].append(line)
+        for i in range(4):
+            self.matrix[0].insert(random.randint(1, 4), ' ')
+            self.matrix[1].insert(random.randint(1, 9), ' ')
+            self.matrix[2].insert(random.randint(1, 9), ' ')
 
+class MyCard(Card):
+
+    def cross_out(self, number, action):
+        if action == 'y':
+            for i, line in enumerate(self.matrix):
+                self.buffer += 1
+                if number in line:
+                    for index, n in enumerate(line):
+                        if str(n) == str(number):
+                            line[index] = '-'
+                            return False
+                elif self.buffer == 3:
+                    self.buffer = 0
+                    return True
+        elif action == 'n':
+            for i, line in enumerate(self.matrix):
+                self.buffer += 1
+                if number in line:
+                    for index, n in enumerate(line):
+                        if str(n) == str(number):
+                            return True
+                elif self.buffer == 3:
+                    self.buffer = 0
+                    return False
+        else:
+            return True
 
     def display(self):
-        print('-' * 34)
+        print('-' * 9, 'Ваша карточка', '-' * 10)
         print('\n'.join('\t'.join(map(str, row))
                          for row in self.matrix))
         print('-' * 34)
 
+class ComCard(Card):
 
-    def string_generation(self):
-        self.number_random = [random.randrange(1, 90) for _ in range(5)]
-        self.number_random.sort()
-        [self.number_random.insert(random.randint(1, 4), ' ') for _ in range(4)]
-        return self.number_random
+    def cross_out(self, number, action='Bug'):
+        for i, line in enumerate(self.matrix):
+            for index, n in enumerate(line):
+                if str(n) == str(number):
+                    line[index] = '-'
 
-card = Card('My')
-card.creation()
-card.display()
-#print('{}'.format(card.string_generation())) #
+    def display(self):
+        print('-' * 6, 'Карточка компьютера', '-' * 7)
+        print('\n'.join('\t'.join(map(str, row))
+                         for row in self.matrix))
+        print('-' * 34)
+
+class KegEngine:
+
+    def __init__(self):
+        self.excluding_kegs = []
+        self.keg = 0
+
+    def random_keg(self):
+        while True:
+            self.keg = random.randrange(1, 91)
+            if not self.keg in self.excluding_kegs:
+                self.excluding_kegs.append(self.keg)
+                break
+
+    def display_keg(self):
+        return self.keg
+
+    def display_balance(self):
+        return 90 - len(self.excluding_kegs)
+
+    def display(self):
+        print('Новый бочонок: {} (осталось {})'.format(self.display_keg(), self.display_balance()))
+
+class GameEngine:
+
+    def __init__(self):
+        self.player = MyCard()
+        self.comp = ComCard()
+        self.keg = KegEngine()
+        self.action = False
+        self.card_generation()
+        self.exit = False
+
+    def card_generation(self):
+        self.player.creation()
+        self.comp.creation()
+
+    def display(self):
+        self.keg.random_keg()
+        self.keg.display()
+        self.player.display()
+        self.comp.display()
+
+    def run(self):
+        while True:
+
+            self.display()
+            self.action = input('Зачеркнуть цифру? (y/n) ')
+            self.comp.cross_out(self.keg.keg)
+            self.exit = self.player.cross_out(self.keg.keg, self.action)
+            if self.exit:
+                break
+
+game = GameEngine()
+game.run()
+
