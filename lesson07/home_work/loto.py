@@ -57,3 +57,34 @@
 модуль random: http://docs.python.org/3/library/random.html
 
 """
+import random
+
+class Card:
+
+    def __init__(self, name):
+        self.name = name
+        self.matrix = []
+        #print('rotate_matrix = ', list(map(list, zip(self.matrix))))
+
+    def creation(self):
+        for _ in range(3):
+            self.matrix.append(self.string_generation())
+
+
+    def display(self):
+        print('-' * 34)
+        print('\n'.join('\t'.join(map(str, row))
+                         for row in self.matrix))
+        print('-' * 34)
+
+
+    def string_generation(self):
+        self.number_random = [random.randrange(1, 90) for _ in range(5)]
+        self.number_random.sort()
+        [self.number_random.insert(random.randint(1, 4), ' ') for _ in range(4)]
+        return self.number_random
+
+card = Card('My')
+card.creation()
+card.display()
+#print('{}'.format(card.string_generation())) #
